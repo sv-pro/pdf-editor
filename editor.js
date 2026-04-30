@@ -106,9 +106,12 @@ class AnnotationLayer {
   }
 
   _annotationTouches(ann, x, y, r) {
+    // Approximate hit-test dimensions for text annotations
+    const TEXT_HIT_WIDTH  = 150;
+    const TEXT_HIT_HEIGHT = 20;
     switch (ann.type) {
       case 'draw': return ann.points.some(p => dist(p, { x, y }) <= r);
-      case 'text':  return x >= ann.x - r && x <= ann.x + 150 + r && y >= ann.y - 20 - r && y <= ann.y + r;
+      case 'text':  return x >= ann.x - r && x <= ann.x + TEXT_HIT_WIDTH + r && y >= ann.y - TEXT_HIT_HEIGHT - r && y <= ann.y + r;
       case 'highlight':
       case 'rect':
       case 'circle': {

@@ -2,11 +2,11 @@ const fs   = require('fs');
 const path = require('path');
 
 // Step 1: Generate icons
-console.log('Generating icons…');
+console.log('Generating icons...');
 require('./generate-icons');
 
 // Step 2: Copy library files from node_modules into libs/
-console.log('\nCopying library files…');
+console.log('\nCopying library files...');
 
 const libsDir = path.join(__dirname, '..', 'libs');
 if (!fs.existsSync(libsDir)) fs.mkdirSync(libsDir, { recursive: true });
