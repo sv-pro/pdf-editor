@@ -2,13 +2,18 @@
   "name": "pdf-editor-extension",
   "version": "1.0.0",
   "private": true,
-  "description": "Chrome extension for editing and annotating PDF files",
+  "description": "Chrome extension -- one-page PDF editor (React + Vite)",
   "scripts": {
-    "build": "node scripts/build.js"
+    "build": "node scripts/generate-icons.js && vite build --config vite.config.mjs",
+    "dev": "vite --config vite.config.mjs"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
     "canvas": "^2.11.2",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^3.11.174"
+    "pdfjs-dist": "^4.10.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.0"
   }
 }

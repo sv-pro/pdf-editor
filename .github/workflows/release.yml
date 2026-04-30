@@ -1,0 +1,60 @@
+name: Build & Release
+
+on:
+  # Creates a GitHub Release with the zip attached when a vX.Y.Z tag is pushed
+  push:
+    tags:
+      - "v*"
+  # Also lets you trigger a build manually from the Actions tab (no release created)
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to create GitHub Releases
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Node.js setup ───────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # ── 3. Install dependencies ────────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Build extension (icons + Vite bundle → dist/) ───────
+      - name: Build extension
+        run: npm run build
+
+      # ── 5. Package dist/ as a zip ──────────────────────────────
+      - name: Zip extension
+        run: |
+          cd dist
+          zip -r ../pdf-editor-extension.zip .
+          cd ..
+          echo "Built $(du -sh pdf-editor-extension.zip | cut -f1) zip"
+
+      # ── 6. Upload zip as a workflow artifact (every run) ───────
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-editor-extension
+          path: pdf-editor-extension.zip
+          retention-days: 30
+
+      # ── 7. Create GitHub Release (tag pushes only) ─────────────
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: pdf-editor-extension.zip
+          generate_release_notes: true
