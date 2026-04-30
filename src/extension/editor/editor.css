@@ -1,0 +1,164 @@
+/* ── Reset & base ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  background: #f0f2f5;
+  color: #1a202c;
+  overflow: hidden;
+}
+
+/* ── Toolbar ─────────────────────────────────────────── */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #2d3748;
+  color: #e2e8f0;
+  height: 48px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  user-select: none;
+}
+
+.toolbar-brand {
+  font-weight: 700;
+  font-size: 16px;
+  color: #90cdf4;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 28px;
+  background: #4a5568;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+#toolbar button,
+#toolbar select {
+  background: #4a5568;
+  border: 1px solid #718096;
+  color: #e2e8f0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 13px;
+  height: 30px;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+#toolbar button:hover,
+#toolbar select:hover { background: #718096; }
+
+#toolbar button:disabled { opacity: 0.4; cursor: default; }
+
+.tool-btn.active {
+  background: #3182ce;
+  border-color: #63b3ed;
+}
+
+/* color + range inputs inside toolbar */
+#toolbar label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+#color-picker  { width: 28px; height: 28px; padding: 2px; border-radius: 4px;
+                 border: 1px solid #718096; cursor: pointer; background: none; }
+#size-picker   { width: 80px; cursor: pointer; accent-color: #90cdf4; }
+
+#page-info { font-size: 12px; white-space: nowrap; min-width: 50px; text-align: center; }
+
+/* ── Canvas container ─────────────────────────────────── */
+#canvas-container {
+  position: fixed;
+  top: 48px; left: 0; right: 0; bottom: 0;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  background: #e2e8f0;
+}
+
+/* Drop-zone overlay */
+#drop-zone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #edf2f7;
+  border: 3px dashed #a0aec0;
+  z-index: 10;
+}
+
+#drop-zone.hidden { display: none; }
+
+#drop-zone p { font-size: 18px; color: #718096; text-align: center; }
+
+/* Canvas wrapper keeps both canvases stacked */
+#canvas-wrapper {
+  position: relative;
+  display: inline-block;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  background: white;
+  flex-shrink: 0;
+}
+
+#pdf-canvas,
+#annotation-canvas {
+  display: block;
+}
+
+#annotation-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  cursor: crosshair;
+}
+
+/* Text tool cursor */
+#annotation-canvas.text-cursor { cursor: text; }
+
+/* ── Floating text input ─────────────────────────────── */
+#text-input {
+  position: absolute;
+  display: none;
+  border: 2px dashed #3182ce;
+  background: rgba(255,255,255,0.9);
+  font-size: 16px;
+  padding: 4px 6px;
+  resize: both;
+  outline: none;
+  min-width: 120px;
+  min-height: 32px;
+  z-index: 50;
+  border-radius: 3px;
+}
+
+/* ── Loading spinner ─────────────────────────────────── */
+#loading {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255,255,255,0.7);
+  z-index: 200;
+  font-size: 20px;
+}
+
+#loading.hidden { display: none; }

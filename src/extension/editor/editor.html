@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF Editor</title>
+  <link rel="stylesheet" href="editor.css" />
+</head>
+<body>
+  <!-- ── Toolbar ─────────────────────────────────────────── -->
+  <div id="toolbar">
+    <span class="toolbar-brand">PDF Editor</span>
+
+    <div class="toolbar-group">
+      <button id="btn-open" title="Open PDF file">📂 Open</button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group" id="tool-buttons">
+      <button class="tool-btn active" data-tool="pen"       title="Pen">✏️</button>
+      <button class="tool-btn"        data-tool="highlight" title="Highlight">🖊️</button>
+      <button class="tool-btn"        data-tool="text"      title="Add text">T</button>
+      <button class="tool-btn"        data-tool="eraser"    title="Eraser">⬜</button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group">
+      <label for="color-picker" title="Colour">🎨
+        <input type="color" id="color-picker" value="#e53e3e" />
+      </label>
+      <label title="Size">
+        <input type="range" id="size-picker" min="1" max="20" value="3" />
+      </label>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group" id="page-nav">
+      <button id="btn-prev" title="Previous page">◀</button>
+      <span id="page-info">– / –</span>
+      <button id="btn-next" title="Next page">▶</button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group">
+      <label title="Zoom">
+        <select id="zoom-select">
+          <option value="0.75">75 %</option>
+          <option value="1"   >100 %</option>
+          <option value="1.25">125 %</option>
+          <option value="1.5" selected>150 %</option>
+          <option value="2"   >200 %</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group">
+      <button id="btn-undo"     title="Undo">↩</button>
+      <button id="btn-clear"    title="Clear annotations on this page">🗑</button>
+      <button id="btn-download" title="Download annotated PDF">⬇ Save</button>
+    </div>
+  </div>
+
+  <!-- ── Canvas area ─────────────────────────────────────── -->
+  <div id="canvas-container">
+    <div id="drop-zone">
+      <p>Drop a PDF here, or click <strong>Open</strong> to choose a file.</p>
+    </div>
+    <div id="canvas-wrapper">
+      <canvas id="pdf-canvas"></canvas>
+      <canvas id="annotation-canvas"></canvas>
+    </div>
+
+    <!-- Floating text input (shown when text tool is active) -->
+    <textarea id="text-input" placeholder="Type here…"></textarea>
+  </div>
+
+  <!-- Hidden file picker -->
+  <input type="file" id="file-input" accept="application/pdf" style="display:none" />
+
+  <!-- editor.js is an ES module; it imports PDF.js and pdf-lib from ../lib/ -->
+  <script type="module" src="editor.js"></script>
+</body>
+</html>

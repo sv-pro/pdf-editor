@@ -1,0 +1,77 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 300px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  color: #1a202c;
+  background: #fff;
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.logo { width: 40px; height: 40px; }
+
+.title    { font-size: 16px; font-weight: 700; }
+.subtitle { font-size: 12px; color: #718096; }
+
+.hidden { display: none !important; }
+
+button {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#btn-edit {
+  background: #3182ce;
+  color: #fff;
+}
+#btn-edit:hover { background: #2b6cb0; }
+
+#btn-open-file {
+  background: #edf2f7;
+  color: #2d3748;
+}
+#btn-open-file:hover { background: #e2e8f0; }
+
+.hint {
+  font-size: 12px;
+  color: #718096;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 8px 0;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 13px;
+  color: #4a5568;
+  padding: 4px 0;
+}
+
+.toggle-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #3182ce;
+}

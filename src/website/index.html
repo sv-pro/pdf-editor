@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PDF Editor – a free Chrome extension for annotating and editing PDF files directly in your browser." />
+  <title>PDF Editor – Chrome Extension</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────── -->
+  <header>
+    <nav class="nav container">
+      <span class="nav-brand">📄 PDF Editor</span>
+      <a href="#download" class="btn btn-primary">Download</a>
+    </nav>
+  </header>
+
+  <!-- ── Hero ───────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h1>Edit PDFs right in <span class="accent">Chrome</span></h1>
+        <p class="lead">
+          PDF Editor is a free, open-source Chrome extension that lets you
+          annotate, highlight and sign PDF files – no upload, no cloud, 100 %
+          private.
+        </p>
+        <div class="hero-actions">
+          <a href="#download" class="btn btn-primary btn-lg">⬇ Download Extension</a>
+          <a href="#features" class="btn btn-outline btn-lg">Learn more</a>
+        </div>
+      </div>
+      <div class="hero-img" aria-hidden="true">
+        <div class="browser-mockup">
+          <div class="browser-bar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <div class="browser-address">📄 document.pdf</div>
+          </div>
+          <div class="browser-body">
+            <div class="toolbar-mock">
+              <span class="tool active">✏️</span>
+              <span class="tool">🖊️</span>
+              <span class="tool">T</span>
+              <span class="tool">⬜</span>
+              <span class="spacer"></span>
+              <span class="tool">⬇ Save</span>
+            </div>
+            <div class="page-mock">
+              <div class="mock-line" style="width:80%"></div>
+              <div class="mock-line" style="width:60%"></div>
+              <div class="mock-line highlight" style="width:70%"></div>
+              <div class="mock-line" style="width:50%"></div>
+              <div class="mock-annotation">← annotation</div>
+              <div class="mock-line" style="width:75%"></div>
+              <div class="mock-line" style="width:40%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ───────────────────────────────────────── -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2 class="section-title">Everything you need</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">✏️</div>
+          <h3>Freehand drawing</h3>
+          <p>Draw directly on any page with the pen tool. Pick any colour and line width.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🖊️</div>
+          <h3>Highlighting</h3>
+          <p>Highlight text passages with a semi-transparent colour block.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">T</div>
+          <h3>Text annotations</h3>
+          <p>Add typed notes anywhere on the page in your chosen colour and size.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">↩</div>
+          <h3>Undo / redo</h3>
+          <p>Made a mistake? Up to 30 steps of undo history per page.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⬇</div>
+          <h3>Save to PDF</h3>
+          <p>Export the annotated document as a standard PDF file with one click.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>100 % private</h3>
+          <p>Everything happens locally in your browser. Your files never leave your device.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Download ───────────────────────────────────────── -->
+  <section class="download-section" id="download">
+    <div class="container download-inner">
+      <h2>Get the extension</h2>
+      <p class="lead">
+        Download the latest release and load it as an unpacked extension in Chrome.
+      </p>
+
+      <a href="download/pdf-editor.zip" class="btn btn-primary btn-xl" download>
+        ⬇ Download pdf-editor.zip
+      </a>
+
+      <div class="install-steps">
+        <h3>Installation instructions</h3>
+        <ol>
+          <li>Click the download button above and save <code>pdf-editor.zip</code>.</li>
+          <li>Unzip the file to a folder on your computer.</li>
+          <li>Open Chrome and go to <code>chrome://extensions</code>.</li>
+          <li>Enable <strong>Developer mode</strong> (top-right toggle).</li>
+          <li>Click <strong>Load unpacked</strong> and select the unzipped folder.</li>
+          <li>The PDF Editor icon will appear in your Chrome toolbar. 🎉</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────── -->
+  <footer>
+    <div class="container footer-inner">
+      <span>© 2024 PDF Editor</span>
+      <span>Open-source Chrome extension</span>
+    </div>
+  </footer>
+
+</body>
+</html>

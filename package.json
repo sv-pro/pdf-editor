@@ -1,0 +1,19 @@
+{
+  "name": "pdf-editor",
+  "version": "1.0.0",
+  "description": "A Chrome extension for editing and annotating PDF files",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.js",
+    "pack": "node scripts/pack.js",
+    "serve": "node scripts/serve.js",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
+  },
+  "devDependencies": {
+    "archiver": "^6.0.0"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.7.284"
+  }
+}

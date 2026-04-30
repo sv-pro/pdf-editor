@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PDF Editor</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="header">
+    <img src="../icons/icon48.png" alt="" class="logo" />
+    <div>
+      <div class="title">PDF Editor</div>
+      <div class="subtitle">Annotate PDF files in your browser</div>
+    </div>
+  </div>
+
+  <div id="pdf-section" class="hidden">
+    <button id="btn-edit">✏️ Open in PDF Editor</button>
+  </div>
+
+  <div id="no-pdf-section">
+    <p class="hint">Navigate to a PDF file, or open a local file below.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <button id="btn-open-file">📂 Open local PDF…</button>
+  <input type="file" id="file-input" accept="application/pdf" style="display:none" />
+
+  <div class="divider"></div>
+
+  <label class="toggle-row">
+    <span>Auto-open PDFs in editor</span>
+    <input type="checkbox" id="toggle-auto-open" />
+  </label>
+
+  <script src="popup.js"></script>
+</body>
+</html>

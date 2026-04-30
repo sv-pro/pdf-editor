@@ -1,0 +1,317 @@
+/* ── Reset & tokens ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:      #3182ce;
+  --blue-dark: #2b6cb0;
+  --blue-light:#ebf8ff;
+  --text:      #1a202c;
+  --muted:     #718096;
+  --bg:        #ffffff;
+  --bg-alt:    #f7fafc;
+  --border:    #e2e8f0;
+  --radius:    8px;
+  --shadow:    0 4px 24px rgba(0,0,0,.10);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* ── Layout ──────────────────────────────────────────────── */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.btn-primary  { background: var(--blue);  color: #fff; }
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-outline  { background: transparent; color: var(--blue); border-color: var(--blue); }
+.btn-outline:hover { background: var(--blue-light); }
+.btn-lg       { padding: 13px 28px; font-size: 16px; }
+.btn-xl       { padding: 16px 40px; font-size: 18px; }
+
+.accent { color: var(--blue); }
+
+/* ── Header / Nav ───────────────────────────────────────── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.nav-brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, #ebf8ff 0%, #f7fafc 100%);
+  padding: 80px 0 60px;
+}
+
+.hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.hero-text { flex: 1 1 380px; }
+
+.hero-text h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 18px;
+}
+
+.lead {
+  font-size: 18px;
+  color: var(--muted);
+  margin-bottom: 28px;
+  max-width: 480px;
+}
+
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* ── Browser mockup ──────────────────────────────────────── */
+.hero-img { flex: 1 1 320px; display: flex; justify-content: center; }
+
+.browser-mockup {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: #fff;
+}
+
+.browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--border);
+}
+
+.dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.dot.red    { background: #fc8181; }
+.dot.yellow { background: #f6e05e; }
+.dot.green  { background: #68d391; }
+
+.browser-address {
+  flex: 1;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.browser-body { padding: 0; }
+
+.toolbar-mock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #2d3748;
+  color: #e2e8f0;
+  font-size: 13px;
+}
+
+.tool {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #4a5568;
+  cursor: default;
+}
+
+.tool.active { background: #3182ce; }
+.spacer      { flex: 1; }
+
+.page-mock {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 180px;
+  position: relative;
+}
+
+.mock-line {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.mock-line.highlight { background: rgba(246, 224, 94, 0.6); }
+
+.mock-annotation {
+  font-size: 11px;
+  color: #e53e3e;
+  font-style: italic;
+  margin-top: -4px;
+}
+
+/* ── Features section ───────────────────────────────────── */
+.features {
+  padding: 80px 0;
+  background: var(--bg);
+}
+
+.section-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 48px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.feature-card {
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: box-shadow .2s;
+}
+
+.feature-card:hover { box-shadow: var(--shadow); }
+
+.feature-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+
+.feature-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.feature-card p { color: var(--muted); }
+
+/* ── Download section ───────────────────────────────────── */
+.download-section {
+  padding: 80px 0;
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border);
+}
+
+.download-inner {
+  text-align: center;
+}
+
+.download-inner h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.download-inner .lead { margin: 0 auto 36px; }
+
+/* Install steps */
+.install-steps {
+  display: inline-block;
+  text-align: left;
+  margin-top: 48px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 40px;
+  max-width: 560px;
+  width: 100%;
+  box-shadow: var(--shadow);
+}
+
+.install-steps h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--text);
+}
+
+.install-steps ol {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.install-steps li { color: #4a5568; }
+
+code {
+  background: #edf2f7;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+/* ── Footer ─────────────────────────────────────────────── */
+footer {
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .hero { padding: 48px 0 36px; }
+  .hero-inner { flex-direction: column; gap: 36px; }
+  .hero-img { width: 100%; }
+  .features, .download-section { padding: 48px 0; }
+  .install-steps { padding: 24px 20px; }
+}
