@@ -20,10 +20,27 @@
       </svg>
       Open Editor
     </button>
+    <button id="edit-this-pdf" class="btn-secondary" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+      Edit This PDF
+    </button>
     <div class="features">
       <div class="feature">✏️ Annotate PDFs</div>
       <div class="feature">🖊️ Freehand drawing</div>
       <div class="feature">💾 Save &amp; download</div>
+    </div>
+    <div class="intercept-section">
+      <label class="toggle-label">
+        <span>Auto-intercept PDF tabs</span>
+        <span class="toggle-track">
+          <input type="checkbox" id="intercept-toggle">
+          <span class="toggle-thumb"></span>
+        </span>
+      </label>
+      <p class="toggle-warning">Redirects all .pdf navigations to the editor</p>
     </div>
   </div>
   <script src="popup.js"></script>

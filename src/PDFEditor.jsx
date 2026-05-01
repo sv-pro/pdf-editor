@@ -6,6 +6,12 @@ import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 // Point PDF.js at the locally-bundled worker (no CDN needed in the extension)
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
+/* ─── URL → filename helper (used by ?src= intercept flow) ─── */
+function deriveFileName(url) {
+  try { return new URL(url).pathname.split("/").pop() || "document.pdf"; }
+  catch { return "document.pdf"; }
+}
+
 /* ─── Matrix helpers for coordinate transform ─── */
 function invertMatrix([a, b, c, d, e, f]) {
   const det = a * d - b * c;
@@ -122,6 +128,7 @@ export default function PDFEditor() {
   const [dragging, setDragging] = useState(false);
   const [busy, setBusy] = useState(false);
   const [busyMsg, setBusyMsg] = useState("");
+  const [urlInput, setUrlInput] = useState("");
 
   const canvasRef = useRef(null);
   const renderRef = useRef(null);
@@ -130,21 +137,13 @@ export default function PDFEditor() {
   const textInputRef = useRef(null);
   const sidebarRef = useRef(null);
 
-  /* ── Load PDF file ── */
-  const loadFile = useCallback(async (file) => {
-    if (!file) return;
-    if (!file.name.toLowerCase().endsWith(".pdf")) {
-      alert("Please select a PDF file.");
-      return;
-    }
+  /* ── Load PDF from raw bytes (used for pre-loaded PDFs from session storage) ── */
+  const loadBytes = useCallback(async (bytes, name) => {
     setBusy(true);
     setBusyMsg("Loading PDF...");
     try {
-      setFileName(file.name);
-      const buf = await file.arrayBuffer();
-      const bytes = new Uint8Array(buf);
+      setFileName(name);
       setOrigBytes(bytes);
-
       const doc = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
       setPdfJs(doc);
       const n = doc.numPages;
@@ -156,11 +155,82 @@ export default function PDFEditor() {
       setTool("select");
     } catch (err) {
       console.error(err);
-      alert("Failed to load PDF. Please try another file.");
+      alert("Failed to load PDF. Please try opening the file manually.");
     }
     setBusy(false);
     setBusyMsg("");
   }, []);
+
+  /* ── Load PDF from URL / file:// path pasted by user ── */
+  const loadFromUrl = useCallback(async (raw) => {
+    const url = raw.trim();
+    if (!url) return;
+    setUrlInput("");
+    setBusy(true);
+    setBusyMsg("Loading PDF...");
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const buf = await res.arrayBuffer();
+      await loadBytes(new Uint8Array(buf), deriveFileName(url));
+    } catch (err) {
+      console.error(err);
+      const msg = url.startsWith("file://")
+        ? 'Could not read local file. Enable "Allow access to file URLs" for PDF Editor in chrome://extensions, then try again.'
+        : "Could not load PDF. Check the URL or try downloading the file and opening it manually.";
+      alert(msg);
+      setBusy(false);
+      setBusyMsg("");
+    }
+  }, [loadBytes]);
+
+  /* ── Load PDF file ── */
+  const loadFile = useCallback(async (file) => {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+      alert("Please select a PDF file.");
+      return;
+    }
+    const buf = await file.arrayBuffer();
+    await loadBytes(new Uint8Array(buf), file.name);
+  }, [loadBytes]);
+
+  /* ── Auto-load PDF pre-fetched by the background service worker ── */
+  useEffect(() => {
+    if (typeof chrome === "undefined" || !chrome.storage?.session) return;
+    const key = new URLSearchParams(window.location.search).get("pdfKey");
+    if (!key) return;
+    (async () => {
+      const data = await chrome.storage.session.get(key);
+      await chrome.storage.session.remove(key);
+      if (!data[key]) return;
+      const { bytes, fileName: name } = data[key];
+      await loadBytes(new Uint8Array(bytes), name);
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── Auto-load PDF intercepted via declarativeNetRequest (?src= redirect) ── */
+  useEffect(() => {
+    const src = new URLSearchParams(window.location.search).get("src");
+    if (!src) return;
+    (async () => {
+      setBusy(true);
+      setBusyMsg("Loading PDF from tab...");
+      try {
+        const res = await fetch(src);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        await loadBytes(new Uint8Array(await res.arrayBuffer()), deriveFileName(src));
+      } catch (err) {
+        console.error(err);
+        const msg = src.startsWith("file://")
+          ? 'Could not read local PDF. In chrome://extensions, enable "Allow access to file URLs" for PDF Editor, then try again.'
+          : "Could not load PDF (CORS or network error). Please download and open manually.";
+        alert(msg);
+        setBusy(false);
+        setBusyMsg("");
+      }
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Render current page ── */
   useEffect(() => {
@@ -433,6 +503,26 @@ export default function PDFEditor() {
           </div>
           <div style={{ color: "#1e2030", fontSize: 10, letterSpacing: 1 }}>
             Shortcuts: T = text tool &middot; +/- = zoom &middot; arrow keys = navigate
+          </div>
+          {/* URL / file path input */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}
+               onClick={(e) => e.stopPropagation()}>
+            <input
+              type="text"
+              placeholder="Paste file:// or https:// URL and press Enter"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") loadFromUrl(urlInput); }}
+              style={{
+                width: 420, padding: "7px 12px",
+                background: "#0d0d14", border: "1px solid #1e2030",
+                borderRadius: 6, color: "#6070a0", fontSize: 11,
+                fontFamily: "monospace", outline: "none",
+                transition: "border-color 0.15s",
+              }}
+              onFocus={(e) => { e.target.style.borderColor = "#00e5ff44"; }}
+              onBlur={(e) => { e.target.style.borderColor = "#1e2030"; }}
+            />
           </div>
         </div>
       ) : (

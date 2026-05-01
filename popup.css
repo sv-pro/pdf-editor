@@ -56,6 +56,26 @@ body {
   background: #1557b0;
 }
 
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: #00e5ff;
+  border: 1px solid #00e5ff;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 229, 255, 0.1);
+}
+
 .features {
   display: flex;
   flex-direction: column;
@@ -67,4 +87,71 @@ body {
 .feature {
   font-size: 12px;
   color: #a6adc8;
+}
+
+.intercept-section {
+  border-top: 1px solid #313244;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 12px;
+  color: #cdd6f4;
+  user-select: none;
+}
+
+.toggle-track {
+  position: relative;
+  width: 32px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.toggle-track input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-thumb {
+  position: absolute;
+  inset: 0;
+  background: #313244;
+  border-radius: 9px;
+  transition: background 0.2s;
+}
+
+.toggle-thumb::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: #a6adc8;
+  border-radius: 50%;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.toggle-track input:checked + .toggle-thumb {
+  background: rgba(0, 229, 255, 0.25);
+}
+
+.toggle-track input:checked + .toggle-thumb::after {
+  transform: translateX(14px);
+  background: #00e5ff;
+}
+
+.toggle-warning {
+  font-size: 10px;
+  color: #6c7086;
+  line-height: 1.4;
 }
