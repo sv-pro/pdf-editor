@@ -128,6 +128,7 @@ export default function PDFEditor() {
   const [dragging, setDragging] = useState(false);
   const [busy, setBusy] = useState(false);
   const [busyMsg, setBusyMsg] = useState("");
+  const [urlInput, setUrlInput] = useState("");
 
   const canvasRef = useRef(null);
   const renderRef = useRef(null);
@@ -159,6 +160,29 @@ export default function PDFEditor() {
     setBusy(false);
     setBusyMsg("");
   }, []);
+
+  /* ── Load PDF from URL / file:// path pasted by user ── */
+  const loadFromUrl = useCallback(async (raw) => {
+    const url = raw.trim();
+    if (!url) return;
+    setUrlInput("");
+    setBusy(true);
+    setBusyMsg("Loading PDF...");
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const buf = await res.arrayBuffer();
+      await loadBytes(new Uint8Array(buf), deriveFileName(url));
+    } catch (err) {
+      console.error(err);
+      const msg = url.startsWith("file://")
+        ? 'Could not read local file. Enable "Allow access to file URLs" for PDF Editor in chrome://extensions, then try again.'
+        : "Could not load PDF. Check the URL or try downloading the file and opening it manually.";
+      alert(msg);
+      setBusy(false);
+      setBusyMsg("");
+    }
+  }, [loadBytes]);
 
   /* ── Load PDF file ── */
   const loadFile = useCallback(async (file) => {
@@ -479,6 +503,26 @@ export default function PDFEditor() {
           </div>
           <div style={{ color: "#1e2030", fontSize: 10, letterSpacing: 1 }}>
             Shortcuts: T = text tool &middot; +/- = zoom &middot; arrow keys = navigate
+          </div>
+          {/* URL / file path input */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}
+               onClick={(e) => e.stopPropagation()}>
+            <input
+              type="text"
+              placeholder="Paste file:// or https:// URL and press Enter"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") loadFromUrl(urlInput); }}
+              style={{
+                width: 420, padding: "7px 12px",
+                background: "#0d0d14", border: "1px solid #1e2030",
+                borderRadius: 6, color: "#6070a0", fontSize: 11,
+                fontFamily: "monospace", outline: "none",
+                transition: "border-color 0.15s",
+              }}
+              onFocus={(e) => { e.target.style.borderColor = "#00e5ff44"; }}
+              onBlur={(e) => { e.target.style.borderColor = "#1e2030"; }}
+            />
           </div>
         </div>
       ) : (
