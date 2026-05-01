@@ -18,3 +18,14 @@ chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
     window.close();
   });
 });
+
+// Intercept toggle
+const toggle = document.getElementById("intercept-toggle");
+
+chrome.storage.local.get("pdfInterceptionEnabled", ({ pdfInterceptionEnabled }) => {
+  toggle.checked = !!pdfInterceptionEnabled;
+});
+
+toggle.addEventListener("change", () => {
+  chrome.runtime.sendMessage({ type: "SET_PDF_INTERCEPTION", enabled: toggle.checked });
+});

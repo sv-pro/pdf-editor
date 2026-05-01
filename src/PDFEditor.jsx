@@ -6,6 +6,12 @@ import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 // Point PDF.js at the locally-bundled worker (no CDN needed in the extension)
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
+/* ─── URL → filename helper (used by ?src= intercept flow) ─── */
+function deriveFileName(url) {
+  try { return new URL(url).pathname.split("/").pop() || "document.pdf"; }
+  catch { return "document.pdf"; }
+}
+
 /* ─── Matrix helpers for coordinate transform ─── */
 function invertMatrix([a, b, c, d, e, f]) {
   const det = a * d - b * c;
@@ -176,6 +182,26 @@ export default function PDFEditor() {
       if (!data[key]) return;
       const { bytes, fileName: name } = data[key];
       await loadBytes(new Uint8Array(bytes), name);
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  /* ── Auto-load PDF intercepted via declarativeNetRequest (?src= redirect) ── */
+  useEffect(() => {
+    const src = new URLSearchParams(window.location.search).get("src");
+    if (!src) return;
+    (async () => {
+      setBusy(true);
+      setBusyMsg("Loading PDF from tab...");
+      try {
+        const res = await fetch(src);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        await loadBytes(new Uint8Array(await res.arrayBuffer()), deriveFileName(src));
+      } catch (err) {
+        console.error(err);
+        alert("Could not load PDF (CORS or network error). Please download and open manually.");
+        setBusy(false);
+        setBusyMsg("");
+      }
     })();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
