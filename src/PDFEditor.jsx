@@ -198,7 +198,10 @@ export default function PDFEditor() {
         await loadBytes(new Uint8Array(await res.arrayBuffer()), deriveFileName(src));
       } catch (err) {
         console.error(err);
-        alert("Could not load PDF (CORS or network error). Please download and open manually.");
+        const msg = src.startsWith("file://")
+          ? 'Could not read local PDF. In chrome://extensions, enable "Allow access to file URLs" for PDF Editor, then try again.'
+          : "Could not load PDF (CORS or network error). Please download and open manually.";
+        alert(msg);
         setBusy(false);
         setBusyMsg("");
       }

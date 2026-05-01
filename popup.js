@@ -14,7 +14,16 @@ chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
   const btn = document.getElementById("edit-this-pdf");
   btn.style.display = "";
   btn.addEventListener("click", () => {
-    chrome.runtime.sendMessage({ type: "FETCH_AND_STORE_PDF", url: tab.url });
+    if (tab.url.startsWith("file://")) {
+      // Service worker cannot fetch file:// URLs — open editor and let the
+      // editor page fetch directly (works when "Allow access to file URLs"
+      // is enabled in chrome://extensions for this extension)
+      chrome.tabs.create({
+        url: chrome.runtime.getURL("editor.html") + "?src=" + encodeURIComponent(tab.url),
+      });
+    } else {
+      chrome.runtime.sendMessage({ type: "FETCH_AND_STORE_PDF", url: tab.url });
+    }
     window.close();
   });
 });
