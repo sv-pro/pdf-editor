@@ -130,21 +130,13 @@ export default function PDFEditor() {
   const textInputRef = useRef(null);
   const sidebarRef = useRef(null);
 
-  /* ── Load PDF file ── */
-  const loadFile = useCallback(async (file) => {
-    if (!file) return;
-    if (!file.name.toLowerCase().endsWith(".pdf")) {
-      alert("Please select a PDF file.");
-      return;
-    }
+  /* ── Load PDF from raw bytes (used for pre-loaded PDFs from session storage) ── */
+  const loadBytes = useCallback(async (bytes, name) => {
     setBusy(true);
     setBusyMsg("Loading PDF...");
     try {
-      setFileName(file.name);
-      const buf = await file.arrayBuffer();
-      const bytes = new Uint8Array(buf);
+      setFileName(name);
       setOrigBytes(bytes);
-
       const doc = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
       setPdfJs(doc);
       const n = doc.numPages;
@@ -156,11 +148,36 @@ export default function PDFEditor() {
       setTool("select");
     } catch (err) {
       console.error(err);
-      alert("Failed to load PDF. Please try another file.");
+      alert("Failed to load PDF. Please try opening the file manually.");
     }
     setBusy(false);
     setBusyMsg("");
   }, []);
+
+  /* ── Load PDF file ── */
+  const loadFile = useCallback(async (file) => {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+      alert("Please select a PDF file.");
+      return;
+    }
+    const buf = await file.arrayBuffer();
+    await loadBytes(new Uint8Array(buf), file.name);
+  }, [loadBytes]);
+
+  /* ── Auto-load PDF pre-fetched by the background service worker ── */
+  useEffect(() => {
+    if (typeof chrome === "undefined" || !chrome.storage?.session) return;
+    const key = new URLSearchParams(window.location.search).get("pdfKey");
+    if (!key) return;
+    (async () => {
+      const data = await chrome.storage.session.get(key);
+      await chrome.storage.session.remove(key);
+      if (!data[key]) return;
+      const { bytes, fileName: name } = data[key];
+      await loadBytes(new Uint8Array(bytes), name);
+    })();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── Render current page ── */
   useEffect(() => {
